@@ -45,9 +45,21 @@ class TaskModal(db.Model):
         return cls.query.filter_by(id=id).first()
 
     @classmethod
+    def find_by_due_date(cls, id, due_date):
+        return cls.query.filter_by(user_id=id, dueDate=due_date)
+
+    @classmethod
     def find_by_user_id(cls, user_id):
         return cls.query.filter_by(user_id=user_id)
 
     @classmethod
     def find_by_id_user_id(cls, id, user_id):
         return cls.query.filter_by(id=id, user_id=user_id).first()
+
+    @classmethod
+    def find_by_finished(cls, id):
+        return cls.query.filter_by(user_id=id, status="Finished")
+
+    # @classmethod
+    # def find_by_over_date(cls, id, due_date):
+    #     return cls.query.filter_by(user_id=id, dueDate=due_date)

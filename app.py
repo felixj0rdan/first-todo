@@ -5,7 +5,7 @@ from db import db
 from flask_cors import CORS
 
 from resources.user import NewUser, User, UserLogin
-from resources.task import NewTask, Task, UsersTask, ChageStatus
+from resources.task import NewTask, Task, UsersTask, ChageStatus, GetTaskByDate, GetOverDue, GetFinished
 
 app = Flask(__name__)
 CORS(app)
@@ -36,6 +36,10 @@ api.add_resource(NewTask, '/new-task')
 api.add_resource(Task, '/task/<int:id>')
 api.add_resource(UsersTask, '/user-tasks')
 api.add_resource(ChageStatus, '/change-status/<int:id>')
+api.add_resource(GetTaskByDate, '/due/<string:due_date>')
+api.add_resource(GetOverDue, '/overdue')
+api.add_resource(GetFinished, '/finished')
+
 
 db.init_app(app)
 

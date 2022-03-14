@@ -127,4 +127,46 @@ class UsersTask(Resource):
         except:
             return {'message': 'Internal Sever Error'}, 500
 
- 
+class GetTaskByDate(Resource):
+    
+    @jwt_required
+    def get(self, due_date):
+        try:
+            id = get_jwt_identity()
+            DATE = datetime.datetime.strptime(due_date, '%Y-%m-%d').date()
+            print(DATE)
+            tasks = [task.json() for task in TaskModal.find_by_due_date(id, DATE)]
+            return {'tasks': tasks}
+        except:
+            return {'message': 'Internal Server Error.'}, 500
+
+class GetOverDue(Resource):
+
+    @jwt_required
+    def get(self):
+        try:
+            jwt = get_jwt_identity()
+            today = datetime.datetime.now().date()
+            print(today)
+            tasks = TaskModal.find_by_user_id(jwt)
+            overdue_tasks = []
+            for task in tasks:
+                if task.dueDate < today:
+                    overdue_tasks.append(task.json())
+
+            return {'task': overdue_tasks}, 200
+
+        except:
+            return{'message': 'Internal Server Error'}, 500
+
+class GetFinished(Resource):
+
+    @jwt_required
+    def get(self):
+        # try:
+        jwt = get_jwt_identity()
+        tasks = [task.json() for task in TaskModal.find_by_finished(jwt)]
+        return{'tasks': tasks}, 200
+        
+        # except:
+        #     return {'message': 'Internal Server Error'}, 500
